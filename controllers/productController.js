@@ -36,6 +36,7 @@ function saveProduct(req, res) {
     products.category = req.body.category
     products.image = req.body.image
 
+    // Guardando el producto y respuesta al cliente
     products.save((err, data) => {
         if (err) return res.status(500).send({ message: `no se pudo guardar los datos: ${err}` })
         res.status(200).send({ products: data })
@@ -44,9 +45,9 @@ function saveProduct(req, res) {
 
 function updateProduct(req, res) {
     let productId = req.params.productId
-    let body = req.body
+    let updateData = req.body
 
-    ProductModel.findByIdAndUpdate(productId, body, (err, productUpdated) => {
+    ProductModel.findByIdAndUpdate(productId, updateData, (err, productUpdated) => {
         if (err) res.status(500).send({ message: `Error al actualizar el producto: ${err}` })
         res.status(200).send({ product: productUpdated })
     })
@@ -56,7 +57,7 @@ function deleteProduct(req, res) {
     let productId = req.params.productId
 
     ProductModel.findById(productId, (err, product) => {
-        if (err) res.status(500).send({ message: `Error al borrar el producto: ${err}` })
+        if (err) res.status(500).send({ message: `Producto no encontrado: ${err}` })
 
         product.remove(err => {
             if (err) res.status(500).send({ message: `Error al borrar el producto: ${err}` })
